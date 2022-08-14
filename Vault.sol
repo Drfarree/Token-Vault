@@ -1,5 +1,13 @@
 // SPDX-License-Identifier: MIT
 
+//EXPLICACIÓN: Para poder ejecutar el vault.sol se tiene que:
+// 1. Deploy de Token.sol para obtener la direccion del contrato
+// 2. Deploy de Vault.sol con la dirección del token establecida en el constructor
+// 3. En el contrato token.sol, en la funcion approve, establecer la cantidad y la direccion del contrato vault.sol
+// 4. La billetera que haya realizado el paso 3 y este inscrita en la whitelist (sino añadir) podra dipositar como maximo lo aprobado anteriormente.
+// 5. Para retirar la cantidad tiene que ser igual a la dipositada previamente
+// 6. Registro del balance de cada dirección y si pertenece en la whitelist, tenemos los dos mappings.
+
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -13,6 +21,7 @@ contract Vault {
     IERC20 public  token;
 
     uint public totalSupply;
+    // totalSupply se modifica segun la variable _shares ya sea en en funcion de burn o mint
     address owner;
     mapping(address => uint) public balanceOf;
 
@@ -92,6 +101,9 @@ contract Vault {
         //Quien ejecute tiene que estar dentro de la whitelist
         
         require(whitelistedAddresses[msg.sender] == true, "ERROR not in WL");
+
+        // La cantidad a retirar tiene que ser igual a la dipositada anteriormente
+        // Si diposita multiples veces la cantidad a devolver es la total
         require (balanceOf[msg.sender] == _shares, "not this amount" );
     
         uint amount = (_shares * token.balanceOf(address(this))) / totalSupply;
