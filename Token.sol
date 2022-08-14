@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/ERC20.sol)
 
+//IMPORTANTE !!!!! LA FUNCION APPROVE ESTA PROGRAMADA COMO X/10**decimales es decir si queremos aprovar 1000 tokens con 2 decimals debemos poner 100000
+
+
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -114,7 +117,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         return _balances[account];
     }
     //Igual que con el supply pasa con el balance de una determinada dirección --> procedemos igual
-    
+
     function realBalanceAddress(address acc) public view virtual  returns (uint256) {
         return _balances[acc]/10**decimals();
     }
@@ -151,6 +154,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - `spender` cannot be the zero address.
      */
     function approve(address spender, uint256 amount) public virtual override returns (bool) {
+    
         address owner = _msgSender();
         _approve(owner, spender, amount);
         return true;
@@ -343,14 +347,12 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - `owner` cannot be the zero address.
      * - `spender` cannot be the zero address.
      */
-    function _approve(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal virtual {
+
+    function _approve(address owner, address spender, uint256 amount) internal virtual {
+
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
-
+    
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
