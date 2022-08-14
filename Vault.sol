@@ -8,6 +8,8 @@
 // 5. Para retirar la cantidad tiene que ser igual a la dipositada previamente
 // 6. Registro del balance de cada dirección y si pertenece en la whitelist, tenemos los dos mappings.
 
+//IMPORTANTE !!!!! LA FUNCION DEPOSIT Y WITHDRAW ESTA PROGRAMADA COMO X/10**decimales es decir si queremos depositar 1000 tokens con 2 decimals debemos poner 100000
+
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -112,3 +114,5 @@ contract Vault {
     }
 
 }
+
+
